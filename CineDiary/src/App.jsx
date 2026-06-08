@@ -1,10 +1,14 @@
-import Logo from './components/Logo'
+import {BrowserRouter as Router, Routes, Route, BrowserRouter} from 'react-router-dom'
+import PaginaInicial from './pages/PaginaInicial'
 
 function App() {
   return (
-    <div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<PaginaInicial />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
-export default App
+export default App;
