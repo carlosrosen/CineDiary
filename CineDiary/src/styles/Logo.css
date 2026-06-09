@@ -6,6 +6,7 @@
   background-color: var(--gray-2);
   width: fit-content;
   padding: 20px 400px 20px 30px; 
+  text-decoration: none;
 }
 
 .logo-icon {
