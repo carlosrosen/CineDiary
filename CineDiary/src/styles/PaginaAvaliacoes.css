@@ -55,12 +55,6 @@
     gap: 1.5rem;
 }
 
-.empty-card {
-    background-color: #242424;
-    border-radius: 4px;
-    min-height: 220px;
-}
-
 @media (max-width: 1024px) {
     .info-cards-container {
         padding-right: 2rem;

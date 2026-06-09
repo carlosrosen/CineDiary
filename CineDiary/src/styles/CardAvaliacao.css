@@ -40,12 +40,22 @@
     background-color: var(--gray-2);
     padding: 6px 30px;
     font-size: 0.8rem;
-    color: #e0e0e0;
+    color: var(--grey-4)
+}
+
+.review-card-dates {
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--gray-2);
+    padding: 8px 12px;
+    font-size: 0.75rem;
+    color: var(--grey-4);
+    margin-bottom: 16px;
 }
 
 .review-card-desc {
     font-size: 0.85rem;
-    color: #e0e0e0;
+    color: var(--grey-4);
     line-height: 1.4;
     margin: 0;
     flex-grow: 1;
@@ -53,21 +63,27 @@
 
 .review-footer {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 16px;
 }
 
 .btn-editar {
     background-color: var(--gray-2);
     color: var(--white);
     border: none;
-    padding: 10px 20%;
+    flex: 1;
+    padding: 10px 0;
     cursor: pointer;
+    text-align: center;
 }
 
 .btn-deletar{
     background-color: var(--red);
     color: var(--white);
     border: none;
-    padding: 10px 20%;
+    flex: 1;
+    padding: 10px 0;
     cursor: pointer;
+    text-align: center;
 }
