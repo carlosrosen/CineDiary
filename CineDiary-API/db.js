@@ -6,9 +6,12 @@ const JSONPATH = 'database.json';
 export async function getData() {
     try{
         const data = await fs.readFile(JSONPATH,'utf-8');
+        if(!data){
+            throw new Error('arquivo vazio');
+        }
         return JSON.parse(data);
     }catch(err){
-        if(err.code === 'ENOENT'){
+        if(err.code === 'ENOENT' || err.message === 'arquivo vazio'){
             const fp = await fs.open(JSONPATH,'w');
             await fp.writeFile('[]');
             await fp.close();
