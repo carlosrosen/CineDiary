@@ -7,15 +7,19 @@ import FilterBar from "../components/FilterBar";
 import CardAvaliacao from "../components/CardAvaliacao";
 import "../styles/PaginaAvaliacoes.css";
 import { EditMovieSerie } from "../components/EditMovieSerie";
+import { DeleteMovieSerie } from "../components/DeleteMovieSerie";
 
 function PaginaAvaliacoes() {
   const [filtro, setFiltro] = useState("Todos");
 
   const [showAddMovieSerie, setShowAddMovieSerie] = useState(false);
   const [showEditMovieSerie, setShowEditMovieSerie] = useState(false);
+  const [showDeleteMovieSerie, setShowDeleteMovieSerie] = useState(false);
   const [editData, setEditData] = useState({});
+  const [deleteData, setDeleteData] = useState({});
   const [showAlert, setShowAlert] = useState(false);
   const [messageAlert, setMessageAlert] = useState("");
+  const [alertTitle, setAlertTitle] = useState("Ocorreu um erro");
 
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -23,7 +27,10 @@ function PaginaAvaliacoes() {
 
   // cria um timer para o modal de alerta
   useEffect(() => {
-    if (messageAlert === "") return;
+    if (messageAlert === "") {
+      setAlertTitle("Ocorreu um erro");
+      return;
+    }
     const alertTimeout = () => {
       setShowAlert(true);
       setTimeout(() => {
@@ -102,7 +109,23 @@ function PaginaAvaliacoes() {
 
         {!isRefreshing ? (
           cards.length !== 0 ? (
-            <section className="cards-grid" aria-label="Lista de avaliações">
+            <section
+              className="cards-grid"
+              aria-label="Lista de avaliações"
+              onClick={(e) => {
+                if (e.target.classList.contains("btn-deletar")) {
+                  const cardEl = e.target.closest(".review-card");
+                  if (cardEl) {
+                    const cardsArray = Array.from(e.currentTarget.querySelectorAll(".review-card"));
+                    const index = cardsArray.indexOf(cardEl);
+                    if (index !== -1) {
+                      setDeleteData(avaliacoesFiltradas[index]);
+                      setShowDeleteMovieSerie(true);
+                    }
+                  }
+                }
+              }}
+            >
               {avaliacoesFiltradas.map((avaliacao) => (
                 <CardAvaliacao
                   key={avaliacao.id}
@@ -169,8 +192,16 @@ function PaginaAvaliacoes() {
         setShowAddMovieSerie={setShowAddMovieSerie}
         setMessageAlert={setMessageAlert}
       />
+      <DeleteMovieSerie
+        refresh={refresh}
+        showDeleteMovieSerie={showDeleteMovieSerie}
+        setShowDeleteMovieSerie={setShowDeleteMovieSerie}
+        setAlertTitle={setAlertTitle}
+        setMessageAlert={setMessageAlert}
+        movieSerie={deleteData}
+      />
       <AlertModal
-        title="Ocorreu um erro"
+        title={alertTitle}
         messageAlert={messageAlert}
         setMessageAlert={setMessageAlert}
         showAlert={showAlert}
