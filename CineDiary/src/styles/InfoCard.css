@@ -1,0 +1,24 @@
+.info-card {
+    background-color: var(--gray-2);
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    color: var(--white);
+    overflow: hidden;
+    min-width: 160px;
+}
+
+.info-card h2 {
+    background-color: var(--black);
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 10px 16px;
+    margin: 0;
+}
+
+.info-card p {
+    font-size: 1.8rem;
+    font-weight: 500;
+    padding: 16px;
+    margin: 0;
+}
