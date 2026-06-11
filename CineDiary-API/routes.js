@@ -16,11 +16,12 @@ routes.get('/',async (req,res)=>{
 })
 routes.post('/',async (req,res)=>{
     try{
-        const { title, type, start_date, end_date, rate, comment } = req.body;
-        if(!title || !type || rate === undefined){
+        const { title, type, start_date, end_date, rating, comment } = req.body;
+        if(!title || !type || rating === undefined){
+            console.log(title,type,rating)
             return res.status(400).json({ error: 'Campos obrigatórios não foram fornecidos' });
         }
-        if(Number.parseFloat(rate) < 0 || Number.parseFloat(rate) > 10){
+        if(Number.parseFloat(rating) < 0 || Number.parseFloat(rating) > 10){
             return res.status(400).json({ error: 'Avaliação deve ser entre 0 e 10' });
         }
         if(new Date(start_date) > new Date(end_date)){
@@ -28,7 +29,7 @@ routes.post('/',async (req,res)=>{
         }
         const uuid = uuidv7();
         const data = await getData();
-        data.push({ id: uuid, title, type, start_date, end_date, rate, comment });
+        data.push({ id: uuid, title, type, start_date, end_date, rating, comment });
         await saveData(data);
         res.status(201).json({ message: 'Dados foram salvos com sucesso' });
     }catch(err){
@@ -38,12 +39,12 @@ routes.post('/',async (req,res)=>{
 })
 routes.put('/:id',async (req,res)=>{
     try{
-        const { title, type, start_date, end_date, rate, comment } = req.body;
-        if(!title || !type || rate === undefined){
+        const { title, type, start_date, end_date, rating, comment } = req.body;
+        if(!title || !type || rating === undefined){
             return res.status(400).json({ error: 'Campos obrigatórios não foram fornecidos' });
         }
         const { id } = req.params;
-        if(Number.parseFloat(rate) < 0 || Number.parseFloat(rate)  > 10){
+        if(Number.parseFloat(rating) < 0 || Number.parseFloat(rating)  > 10){
             return res.status(400).json({ error: 'Avaliação deve ser entre 0 e 10' });
         }
         if(new Date(start_date) > new Date(end_date)){
@@ -52,7 +53,7 @@ routes.put('/:id',async (req,res)=>{
         const data = await getData();
         const index = data.findIndex(item => item.id === id);
         if(index !== -1){
-            data[index] = { ...data[index], title, type, start_date, end_date, rate, comment };
+            data[index] = { ...data[index], title, type, start_date, end_date, rating, comment };
             await saveData(data);
             res.status(200).json({ message: 'Dados atualizados com sucesso' });
         }else{
