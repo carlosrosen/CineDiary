@@ -1,19 +1,15 @@
 import express from 'express';
+import routes from './routes.js';
 import cors from 'cors';
-import dotenv from 'dotenv';
 
-dotenv.config();
-
+const PORT = 3000;
 const app = express();
-const port = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json())
 
-app.get('/', (req, res) => {
-  res.send('CineDiary API is running!');
-});
+app.use('/api',routes);
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+app.listen(PORT,()=>{
+    console.log(`Esta rodando na porta ${PORT}`)
+})
