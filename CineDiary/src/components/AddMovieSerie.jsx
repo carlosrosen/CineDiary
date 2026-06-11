@@ -2,14 +2,14 @@ import { useState } from "react";
 import Modal from "react-modal";
 import "../styles/addEditMovieSerie.css";
 
-const RATE_DEFAULT = 5.0;
+const RATING_DEFAULT = 5.0;
 
 export const AddMovieSerie = (props) => {
   const [title, setTitle] = useState("");
   const [type, setType] = useState("");
   const [start_date, setStartDate] = useState("");
   const [end_date, setEndDate] = useState("");
-  const [rate, setRate] = useState(RATE_DEFAULT);
+  const [rating, setRating] = useState(RATING_DEFAULT);
   const [comment, setComment] = useState("");
   const [isAdding, setIsAdding] = useState(false);
 
@@ -18,7 +18,7 @@ export const AddMovieSerie = (props) => {
     setType("");
     setStartDate("");
     setEndDate("");
-    setRate(RATE_DEFAULT);
+    setRating(RATING_DEFAULT);
     setComment("");
   };
 
@@ -32,12 +32,12 @@ export const AddMovieSerie = (props) => {
       props.setMessageAlert("O tipo é obrigatório.");
       return;
     }
-    if (!rate) {
+    if (!rating) {
       props.setMessageAlert("A avaliação é obrigatória.");
       return;
     }
-    const numericRate = parseFloat(rate);
-    if (numericRate < 0 || numericRate > 10) {
+    const numericRating = parseFloat(rating);
+    if (numericRating < 0 || numericRating > 10) {
       props.setMessageAlert("A avaliação deve estar entre 0 e 10.");
       return;
     }
@@ -51,7 +51,7 @@ export const AddMovieSerie = (props) => {
       type,
       start_date,
       end_date,
-      rate: numericRate,
+      rating: numericRating,
       comment,
     };
 
@@ -69,6 +69,7 @@ export const AddMovieSerie = (props) => {
       }
       resetForm();
       setIsAdding(false);
+      props.refresh();
       props.setShowAddMovieSerie(false);
     } catch (error) {
       console.error("Error adding movie or serie:", error);
@@ -139,8 +140,8 @@ export const AddMovieSerie = (props) => {
           required={true}
         >
           <option value="">Selecione o tipo</option>
-          <option value="movie">Filme</option>
-          <option value="series">Série</option>
+          <option value="Filme">Filme</option>
+          <option value="Série">Série</option>
         </select>
         <section style={{ display: "flex", gap: "1rem", flexDirection: "row" }}>
           <label
@@ -170,7 +171,7 @@ export const AddMovieSerie = (props) => {
             />
           </label>
         </section>
-        <label htmlFor="rate">Avaliação</label>
+        <label htmlFor="rating">Avaliação</label>
         <section
           style={{
             display: "flex",
@@ -180,17 +181,16 @@ export const AddMovieSerie = (props) => {
           }}
         >
           <input
-            id="rate"
+            id="rating"
             type="range"
             min="0"
             max="10"
             step={0.1}
-            placeholder="Rate"
-            value={rate}
-            onChange={(e) => setRate(e.target.value)}
+            value={rating}
+            onChange={(e) => setRating(e.target.value)}
           />
           <span style={{ marginLeft: "2rem", color: "red", fontSize: "1.2rem" }}>
-            {Number.parseFloat(rate).toFixed(1)}
+            {Number.parseFloat(rating).toFixed(1)}
           </span>
         </section>
         <label htmlFor="comment">Comentário</label>

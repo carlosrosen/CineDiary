@@ -2,28 +2,28 @@ import { useState, useEffect } from "react";
 import Modal from "react-modal";
 import "../styles/addEditMovieSerie.css";
 
-const RATE_DEFAULT = 5.0;
+const RATING_DEFAULT = 5.0;
 
 export const EditMovieSerie = (props) => {
   const [title, setTitle] = useState("");
   const [type, setType] = useState("");
   const [start_date, setStartDate] = useState("");
   const [end_date, setEndDate] = useState("");
-  const [rate, setRate] = useState(RATE_DEFAULT);
+  const [rating, setRating] = useState(RATING_DEFAULT);
   const [comment, setComment] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
-    (()=>{
+    (() => {
       if (props.movieSerie) {
         setTitle(props.movieSerie.title || "");
         setType(props.movieSerie.type || "");
         setStartDate(props.movieSerie.start_date || "");
         setEndDate(props.movieSerie.end_date || "");
-        setRate(props.movieSerie.rate || RATE_DEFAULT);
+        setRating(props.movieSerie.rating || RATING_DEFAULT);
         setComment(props.movieSerie.comment || "");
       }
-    })()
+    })();
   }, [props.movieSerie, props.showEditMovieSerie]);
 
   const handleSubmit = async (e) => {
@@ -40,17 +40,19 @@ export const EditMovieSerie = (props) => {
       props.setMessageAlert("O tipo é obrigatório.");
       return;
     }
-    if (!rate) {
+    if (!rating) {
       props.setMessageAlert("A avaliação é obrigatória.");
       return;
     }
-    const numericRate = parseFloat(rate);
-    if (numericRate < 0 || numericRate > 10) {
+    const numericRating = parseFloat(rating);
+    if (numericRating < 0 || numericRating > 10) {
       props.setMessageAlert("A avaliação deve estar entre 0 e 10.");
       return;
     }
     if (start_date && end_date && new Date(start_date) > new Date(end_date)) {
-      props.setMessageAlert("A data de início não pode ser posterior à data de término.");
+      props.setMessageAlert(
+        "A data de início não pode ser posterior à data de término.",
+      );
       return;
     }
 
@@ -59,46 +61,31 @@ export const EditMovieSerie = (props) => {
       type,
       start_date,
       end_date,
-      rate: numericRate,
+      rating: numericRating,
       comment,
     };
 
     try {
       setIsUpdating(true);
-      const response = await fetch(`http://localhost:3000/api/${props.movieSerie.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `http://localhost:3000/api/${props.movieSerie.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedFilm),
         },
-        body: JSON.stringify(updatedFilm),
-      });
+      );
       if (!response.ok) {
         throw new Error("Erro ao editar o filme/série");
       }
       setIsUpdating(false);
+      props.refresh();
       props.setShowEditMovieSerie(false);
-      if (props.onSuccess) {
-        props.onSuccess();
-      }
-    } catch (error) {
-      console.warn("Servidor offline. Editando localmente...", error);
-      const local = localStorage.getItem("cinediary_items");
-      if (local) {
-        const currentItems = JSON.parse(local);
-        const itemIndex = currentItems.findIndex(item => item.id === props.movieSerie.id);
-        if (itemIndex !== -1) {
-          currentItems[itemIndex] = {
-            ...currentItems[itemIndex],
-            ...updatedFilm,
-          };
-          localStorage.setItem("cinediary_items", JSON.stringify(currentItems));
-        }
-      }
-      setIsUpdating(false);
-      props.setShowEditMovieSerie(false);
-      if (props.onSuccess) {
-        props.onSuccess();
-      }
+    } catch {
+      console.error('Erro ao editar avaliação')
+      props.setMessageAlert('Erro ao editar avaliação');
     }
   };
 
@@ -164,8 +151,8 @@ export const EditMovieSerie = (props) => {
           required={true}
         >
           <option value="">Selecione o tipo</option>
-          <option value="movie">Filme</option>
-          <option value="series">Série</option>
+          <option value="Filme">Filme</option>
+          <option value="Série">Série</option>
         </select>
         <section style={{ display: "flex", gap: "1rem", flexDirection: "row" }}>
           <label
@@ -195,7 +182,7 @@ export const EditMovieSerie = (props) => {
             />
           </label>
         </section>
-        <label htmlFor="edit-rate">Avaliação</label>
+        <label htmlFor="edit-rating">Avaliação</label>
         <section
           style={{
             display: "flex",
@@ -205,17 +192,18 @@ export const EditMovieSerie = (props) => {
           }}
         >
           <input
-            id="edit-rate"
+            id="edit-rating"
             type="range"
             min="0"
             max="10"
             step={0.1}
-            placeholder="Rate"
-            value={rate}
-            onChange={(e) => setRate(e.target.value)}
+            value={rating}
+            onChange={(e) => setRating(e.target.value)}
           />
-          <span style={{ marginLeft: "2rem", color: "red", fontSize: "1.2rem" }}>
-            {Number.parseFloat(rate).toFixed(1)}
+          <span
+            style={{ marginLeft: "2rem", color: "red", fontSize: "1.2rem" }}
+          >
+            {Number.parseFloat(rating).toFixed(1)}
           </span>
         </section>
         <label htmlFor="edit-comment">Comentário</label>
@@ -235,7 +223,7 @@ export const EditMovieSerie = (props) => {
         >
           <button
             type="button"
-            onClick={() => props.setShowEditMovieSerie(false)}
+            onClick={()=>{props.setShowEditMovieSerie(false)}}
             style={{
               backgroundColor: "#242424",
               flex: 1,
