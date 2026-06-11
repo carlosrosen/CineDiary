@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { AddEditMovieSerie } from "./components/addEditMovieSerie";
+import { AddMovieSerie } from "./components/AddMovieSerie";
 import { AlertModal } from "./components/AlertModal";
 
 function App() {
@@ -23,7 +23,7 @@ function App() {
       <button onClick={() => {setShowAddEditMovieSerie(true)}}>
         Adicionar Filme/Série
       </button>
-      <AddEditMovieSerie setShowAddEditMovieSerie={setShowAddEditMovieSerie} showAddEditMovieSerie={showAddEditMovieSerie} setMessageAlert={setMessageAlert} />
+      <AddMovieSerie setShowAddEditMovieSerie={setShowAddEditMovieSerie} showAddEditMovieSerie={showAddEditMovieSerie} setMessageAlert={setMessageAlert} />
       <AlertModal title='Ocorreu um erro' messageAlert={messageAlert} setMessageAlert={setMessageAlert} showAlert={showAlert} setShowAlert={setShowAlert} />
     </div>
   );
