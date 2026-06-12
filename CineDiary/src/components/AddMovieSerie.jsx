@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Modal from "react-modal";
-import "../styles/addEditMovieSerie.css";
+import "../styles/globalStyle.css";
+import "../styles/AddMovieSerie.css";
 
 const RATING_DEFAULT = 5.0;
 
@@ -81,46 +82,22 @@ export const AddMovieSerie = (props) => {
   return (
     <Modal
       id="add-form"
-      className="form-field"
+      className="add-movie-modal"
+      overlayClassName="add-movie-overlay"
       isOpen={props.showAddMovieSerie}
       onRequestClose={() => props.setShowAddMovieSerie(false)}
       contentLabel="Adicionar Filme/Série"
       appElement={document.getElementById("root")}
-      style={{
-        overlay: {
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: "rgba(0, 0, 0, 0.4)",
-        },
-        content: {
-          display: "flex",
-          flex: 1,
-          justifySelf: "center",
-          alignSelf: "center",
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          padding: "2rem",
-          borderRadius: "8px",
-          gap: "1rem",
-        },
-      }}
     >
-      <h2>Adicionar Filme/Série</h2>
+      <header>
+        <h2>Adicionar Filme/Série</h2>
+      </header>
       <form
         onSubmit={handleSubmit}
-        style={{
-          display: isAdding ? "none" : "flex",
-          flexDirection: "column",
-          gap: "10px",
-        }}
+        className={`add-movie-form ${isAdding ? "hidden" : ""}`}
       >
         <label htmlFor="title">
-          Título <span style={{ color: "red" }}>*</span>
+          Título <span className="required-asterisk">*</span>
         </label>
         <input
           id="title"
@@ -131,7 +108,7 @@ export const AddMovieSerie = (props) => {
           required={true}
         />
         <label htmlFor="type">
-          Tipo <span style={{ color: "red" }}>*</span>
+          Tipo <span className="required-asterisk">*</span>
         </label>
         <select
           id="type"
@@ -143,11 +120,8 @@ export const AddMovieSerie = (props) => {
           <option value="Filme">Filme</option>
           <option value="Série">Série</option>
         </select>
-        <section style={{ display: "flex", gap: "1rem", flexDirection: "row" }}>
-          <label
-            htmlFor="start_date"
-            style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
-          >
+        <section className="form-row">
+          <label htmlFor="start_date" className="date-label">
             Data de Início
             <input
               id="start_date"
@@ -157,10 +131,7 @@ export const AddMovieSerie = (props) => {
               onChange={(e) => setStartDate(e.target.value)}
             />
           </label>
-          <label
-            htmlFor="end_date"
-            style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
-          >
+          <label htmlFor="end_date" className="date-label">
             Data de Término
             <input
               id="end_date"
@@ -172,14 +143,7 @@ export const AddMovieSerie = (props) => {
           </label>
         </section>
         <label htmlFor="rating">Avaliação</label>
-        <section
-          style={{
-            display: "flex",
-            gap: "1rem",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
+        <section className="rating-section">
           <input
             id="rating"
             type="range"
@@ -189,7 +153,7 @@ export const AddMovieSerie = (props) => {
             value={rating}
             onChange={(e) => setRating(e.target.value)}
           />
-          <span style={{ marginLeft: "2rem", color: "red", fontSize: "1.2rem" }}>
+          <span className="rating-value">
             {Number.parseFloat(rating).toFixed(1)}
           </span>
         </section>
@@ -200,78 +164,27 @@ export const AddMovieSerie = (props) => {
           value={comment}
           onChange={(e) => setComment(e.target.value)}
         />
-        <section
-          style={{
-            display: "flex",
-            gap: "1rem",
-            flexDirection: "row",
-            marginTop: "1rem",
-          }}
-        >
+        <footer className="button-group">
           <button
             type="button"
             onClick={() => props.setShowAddMovieSerie(false)}
-            style={{
-              backgroundColor: "#242424",
-              flex: 1,
-              color: "white",
-              border: "none",
-              padding: "0.5rem 1rem",
-              cursor: "pointer",
-              marginRight: "auto",
-              marginLeft: "auto",
-            }}
+            className="btn-cancel"
           >
             Cancelar
           </button>
           <button
             type="submit"
-            style={{
-              backgroundColor: "#ff0000",
-              color: "white",
-              flex: 1,
-              border: "none",
-              padding: "0.5rem 1rem",
-              cursor: "pointer",
-              marginRight: "auto",
-              marginLeft: "auto",
-            }}
+            className="btn-submit"
           >
             Adicionar
           </button>
-        </section>
+        </footer>
       </form>
       {isAdding && (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "2rem",
-            color: "white",
-            minHeight: "200px",
-          }}
-        >
-          <div
-            style={{
-              border: "4px solid rgba(255, 255, 255, 0.1)",
-              width: "36px",
-              height: "36px",
-              borderRadius: "50%",
-              borderLeftColor: "#ff0000",
-              animation: "spin 1s linear infinite",
-              marginBottom: "1rem",
-            }}
-          />
+        <section className="loading-container" aria-live="polite">
+          <span className="spinner" aria-hidden="true" />
           <span>Adicionando...</span>
-          <style>{`
-            @keyframes spin {
-              0% { transform: rotate(0deg); }
-              100% { transform: rotate(360deg); }
-            }
-          `}</style>
-        </div>
+        </section>
       )}
     </Modal>
   );
