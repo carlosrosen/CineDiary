@@ -1,29 +1,30 @@
 import { useState, useEffect } from "react";
 import Modal from "react-modal";
-import "../styles/addEditMovieSerie.css";
+import "../styles/globalStyle.css";
+import "../styles/EditMovieSerie.css";
 
-const RATE_DEFAULT = 5.0;
+const RATING_DEFAULT = 5.0;
 
 export const EditMovieSerie = (props) => {
   const [title, setTitle] = useState("");
   const [type, setType] = useState("");
   const [start_date, setStartDate] = useState("");
   const [end_date, setEndDate] = useState("");
-  const [rate, setRate] = useState(RATE_DEFAULT);
+  const [rating, setRating] = useState(RATING_DEFAULT);
   const [comment, setComment] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
-    (()=>{
+    (() => {
       if (props.movieSerie) {
         setTitle(props.movieSerie.title || "");
         setType(props.movieSerie.type || "");
         setStartDate(props.movieSerie.start_date || "");
         setEndDate(props.movieSerie.end_date || "");
-        setRate(props.movieSerie.rate || RATE_DEFAULT);
+        setRating(props.movieSerie.rating || RATING_DEFAULT);
         setComment(props.movieSerie.comment || "");
       }
-    })()
+    })();
   }, [props.movieSerie, props.showEditMovieSerie]);
 
   const handleSubmit = async (e) => {
@@ -40,17 +41,19 @@ export const EditMovieSerie = (props) => {
       props.setMessageAlert("O tipo é obrigatório.");
       return;
     }
-    if (!rate) {
+    if (!rating) {
       props.setMessageAlert("A avaliação é obrigatória.");
       return;
     }
-    const numericRate = parseFloat(rate);
-    if (numericRate < 0 || numericRate > 10) {
+    const numericRating = parseFloat(rating);
+    if (numericRating < 0 || numericRating > 10) {
       props.setMessageAlert("A avaliação deve estar entre 0 e 10.");
       return;
     }
     if (start_date && end_date && new Date(start_date) > new Date(end_date)) {
-      props.setMessageAlert("A data de início não pode ser posterior à data de término.");
+      props.setMessageAlert(
+        "A data de início não pode ser posterior à data de término.",
+      );
       return;
     }
 
@@ -59,92 +62,53 @@ export const EditMovieSerie = (props) => {
       type,
       start_date,
       end_date,
-      rate: numericRate,
+      rating: numericRating,
       comment,
     };
 
     try {
       setIsUpdating(true);
-      const response = await fetch(`http://localhost:3000/api/${props.movieSerie.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `http://localhost:3000/api/${props.movieSerie.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedFilm),
         },
-        body: JSON.stringify(updatedFilm),
-      });
+      );
       if (!response.ok) {
         throw new Error("Erro ao editar o filme/série");
       }
       setIsUpdating(false);
+      props.refresh();
       props.setShowEditMovieSerie(false);
-      if (props.onSuccess) {
-        props.onSuccess();
-      }
-    } catch (error) {
-      console.warn("Servidor offline. Editando localmente...", error);
-      const local = localStorage.getItem("cinediary_items");
-      if (local) {
-        const currentItems = JSON.parse(local);
-        const itemIndex = currentItems.findIndex(item => item.id === props.movieSerie.id);
-        if (itemIndex !== -1) {
-          currentItems[itemIndex] = {
-            ...currentItems[itemIndex],
-            ...updatedFilm,
-          };
-          localStorage.setItem("cinediary_items", JSON.stringify(currentItems));
-        }
-      }
-      setIsUpdating(false);
-      props.setShowEditMovieSerie(false);
-      if (props.onSuccess) {
-        props.onSuccess();
-      }
+    } catch {
+      console.error('Erro ao editar avaliação')
+      props.setMessageAlert('Erro ao editar avaliação');
     }
   };
 
   return (
     <Modal
       id="edit-form"
-      className="form-field"
+      className="edit-movie-modal"
+      overlayClassName="edit-movie-overlay"
       isOpen={props.showEditMovieSerie}
       onRequestClose={() => props.setShowEditMovieSerie(false)}
       contentLabel="Editar Filme/Série"
       appElement={document.getElementById("root")}
-      style={{
-        overlay: {
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: "rgba(0, 0, 0, 0.4)",
-        },
-        content: {
-          display: "flex",
-          flex: 1,
-          justifySelf: "center",
-          alignSelf: "center",
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          padding: "2rem",
-          borderRadius: "8px",
-          gap: "1rem",
-        },
-      }}
     >
-      <h2>Editar Filme/Série</h2>
+      <header>
+        <h2>Editar Filme/Série</h2>
+      </header>
       <form
         onSubmit={handleSubmit}
-        style={{
-          display: isUpdating ? "none" : "flex",
-          flexDirection: "column",
-          gap: "10px",
-        }}
+        className={`edit-movie-form ${isUpdating ? "hidden" : ""}`}
       >
         <label htmlFor="edit-title">
-          Título <span style={{ color: "red" }}>*</span>
+          Título <span className="required-asterisk">*</span>
         </label>
         <input
           id="edit-title"
@@ -155,7 +119,7 @@ export const EditMovieSerie = (props) => {
           required={true}
         />
         <label htmlFor="edit-type">
-          Tipo <span style={{ color: "red" }}>*</span>
+          Tipo <span className="required-asterisk">*</span>
         </label>
         <select
           id="edit-type"
@@ -164,14 +128,11 @@ export const EditMovieSerie = (props) => {
           required={true}
         >
           <option value="">Selecione o tipo</option>
-          <option value="movie">Filme</option>
-          <option value="series">Série</option>
+          <option value="Filme">Filme</option>
+          <option value="Série">Série</option>
         </select>
-        <section style={{ display: "flex", gap: "1rem", flexDirection: "row" }}>
-          <label
-            htmlFor="edit-start_date"
-            style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
-          >
+        <section className="form-row">
+          <label htmlFor="edit-start_date" className="date-label">
             Data de Início
             <input
               id="edit-start_date"
@@ -181,10 +142,7 @@ export const EditMovieSerie = (props) => {
               onChange={(e) => setStartDate(e.target.value)}
             />
           </label>
-          <label
-            htmlFor="edit-end_date"
-            style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
-          >
+          <label htmlFor="edit-end_date" className="date-label">
             Data de Término
             <input
               id="edit-end_date"
@@ -195,27 +153,19 @@ export const EditMovieSerie = (props) => {
             />
           </label>
         </section>
-        <label htmlFor="edit-rate">Avaliação</label>
-        <section
-          style={{
-            display: "flex",
-            gap: "1rem",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
+        <label htmlFor="edit-rating">Avaliação</label>
+        <section className="rating-section">
           <input
-            id="edit-rate"
+            id="edit-rating"
             type="range"
             min="0"
             max="10"
             step={0.1}
-            placeholder="Rate"
-            value={rate}
-            onChange={(e) => setRate(e.target.value)}
+            value={rating}
+            onChange={(e) => setRating(e.target.value)}
           />
-          <span style={{ marginLeft: "2rem", color: "red", fontSize: "1.2rem" }}>
-            {Number.parseFloat(rate).toFixed(1)}
+          <span className="rating-value">
+            {Number.parseFloat(rating).toFixed(1)}
           </span>
         </section>
         <label htmlFor="edit-comment">Comentário</label>
@@ -225,78 +175,29 @@ export const EditMovieSerie = (props) => {
           value={comment}
           onChange={(e) => setComment(e.target.value)}
         />
-        <section
-          style={{
-            display: "flex",
-            gap: "1rem",
-            flexDirection: "row",
-            marginTop: "1rem",
-          }}
-        >
+        <footer className="button-group">
           <button
             type="button"
-            onClick={() => props.setShowEditMovieSerie(false)}
-            style={{
-              backgroundColor: "#242424",
-              flex: 1,
-              color: "white",
-              border: "none",
-              padding: "0.5rem 1rem",
-              cursor: "pointer",
-              marginRight: "auto",
-              marginLeft: "auto",
+            onClick={() => {
+              props.setShowEditMovieSerie(false);
             }}
+            className="btn-cancel"
           >
             Cancelar
           </button>
           <button
             type="submit"
-            style={{
-              backgroundColor: "#ff0000",
-              color: "white",
-              flex: 1,
-              border: "none",
-              padding: "0.5rem 1rem",
-              cursor: "pointer",
-              marginRight: "auto",
-              marginLeft: "auto",
-            }}
+            className="btn-save"
           >
             Salvar
           </button>
-        </section>
+        </footer>
       </form>
       {isUpdating && (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "2rem",
-            color: "white",
-            minHeight: "200px",
-          }}
-        >
-          <div
-            style={{
-              border: "4px solid rgba(255, 255, 255, 0.1)",
-              width: "36px",
-              height: "36px",
-              borderRadius: "50%",
-              borderLeftColor: "#ff0000",
-              animation: "spin 1s linear infinite",
-              marginBottom: "1rem",
-            }}
-          />
+        <section className="loading-container" aria-live="polite">
+          <span className="spinner" aria-hidden="true" />
           <span>Atualizando...</span>
-          <style>{`
-            @keyframes spin {
-              0% { transform: rotate(0deg); }
-              100% { transform: rotate(360deg); }
-            }
-          `}</style>
-        </div>
+        </section>
       )}
     </Modal>
   );
