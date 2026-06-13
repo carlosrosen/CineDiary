@@ -1,11 +1,12 @@
 import { useState } from "react";
-import Modal from "react-modal";
+import { useNavigate } from "react-router-dom";
+import { createAvaliacao } from "../services/api";
 import "../styles/globalStyle.css";
-import "../styles/AddMovieSerie.css";
+import "../styles/FormAddAvaliacao.css";
 
 const RATING_DEFAULT = 5.0;
 
-export const AddMovieSerie = (props) => {
+export const FormAddAvaliacao = (props) => {
   const [title, setTitle] = useState("");
   const [type, setType] = useState("");
   const [start_date, setStartDate] = useState("");
@@ -13,6 +14,8 @@ export const AddMovieSerie = (props) => {
   const [rating, setRating] = useState(RATING_DEFAULT);
   const [comment, setComment] = useState("");
   const [isAdding, setIsAdding] = useState(false);
+  
+  const navigate = useNavigate();
 
   const resetForm = () => {
     setTitle("");
@@ -21,6 +24,10 @@ export const AddMovieSerie = (props) => {
     setEndDate("");
     setRating(RATING_DEFAULT);
     setComment("");
+  };
+
+  const handleCancel = () => {
+    navigate('/avaliacoes');
   };
 
   const handleSubmit = async (e) => {
@@ -58,20 +65,11 @@ export const AddMovieSerie = (props) => {
 
     try {
       setIsAdding(true);
-      const response = await fetch("http://localhost:3000/api/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newFilm),
-      });
-      if (!response.ok) {
-        throw new Error("Erro ao adicionar o filme/série");
-      }
+      const response = await createAvaliacao(newFilm);
       resetForm();
       setIsAdding(false);
-      props.refresh();
-      props.setShowAddMovieSerie(false);
+      if(props.refresh) props.refresh();
+      navigate('/avaliacoes');
     } catch (error) {
       console.error("Error adding movie or serie:", error);
       props.setMessageAlert(error.message);
@@ -80,17 +78,9 @@ export const AddMovieSerie = (props) => {
   };
 
   return (
-    <Modal
-      id="add-form"
-      className="add-movie-modal"
-      overlayClassName="add-movie-overlay"
-      isOpen={props.showAddMovieSerie}
-      onRequestClose={() => props.setShowAddMovieSerie(false)}
-      contentLabel="Adicionar Filme/Série"
-      appElement={document.getElementById("root")}
-    >
+    <section id="add-form" className="add-movie-container">
       <header>
-        <h2>Adicionar Filme/Série</h2>
+        <h2>Adicionar avaliação</h2>
       </header>
       <form
         onSubmit={handleSubmit}
@@ -126,7 +116,7 @@ export const AddMovieSerie = (props) => {
             <input
               id="start_date"
               type="date"
-              placeholder="Start Date"
+              placeholder="Data de Início"
               value={start_date}
               onChange={(e) => setStartDate(e.target.value)}
             />
@@ -136,7 +126,7 @@ export const AddMovieSerie = (props) => {
             <input
               id="end_date"
               type="date"
-              placeholder="End Date"
+              placeholder="Data de Término"
               value={end_date}
               onChange={(e) => setEndDate(e.target.value)}
             />
@@ -167,7 +157,7 @@ export const AddMovieSerie = (props) => {
         <footer className="button-group">
           <button
             type="button"
-            onClick={() => props.setShowAddMovieSerie(false)}
+            onClick={handleCancel}
             className="btn-cancel"
           >
             Cancelar
@@ -186,6 +176,6 @@ export const AddMovieSerie = (props) => {
           <span>Adicionando...</span>
         </section>
       )}
-    </Modal>
+    </section>
   );
 };

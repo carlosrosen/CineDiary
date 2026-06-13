@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import Modal from "react-modal";
+import { updateAvaliacao } from "../services/api";
 import "../styles/globalStyle.css";
-import "../styles/EditMovieSerie.css";
+import "../styles/ModalEditAvaliacao.css";
 
 const RATING_DEFAULT = 5.0;
 
-export const EditMovieSerie = (props) => {
+export const ModalEditAvaliacao = (props) => {
   const [title, setTitle] = useState("");
   const [type, setType] = useState("");
   const [start_date, setStartDate] = useState("");
@@ -25,7 +26,7 @@ export const EditMovieSerie = (props) => {
         setComment(props.movieSerie.comment || "");
       }
     })();
-  }, [props.movieSerie, props.showEditMovieSerie]);
+  }, [props.movieSerie, props.showEditarAvaliacao]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -68,22 +69,10 @@ export const EditMovieSerie = (props) => {
 
     try {
       setIsUpdating(true);
-      const response = await fetch(
-        `http://localhost:3000/api/${props.movieSerie.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedFilm),
-        },
-      );
-      if (!response.ok) {
-        throw new Error("Erro ao editar o filme/série");
-      }
+      await updateAvaliacao(props.movieSerie.id, updatedFilm);
       setIsUpdating(false);
       props.refresh();
-      props.setShowEditMovieSerie(false);
+      props.setShowEditarAvaliacao(false);
     } catch {
       console.error('Erro ao editar avaliação')
       props.setMessageAlert('Erro ao editar avaliação');
@@ -95,13 +84,13 @@ export const EditMovieSerie = (props) => {
       id="edit-form"
       className="edit-movie-modal"
       overlayClassName="edit-movie-overlay"
-      isOpen={props.showEditMovieSerie}
-      onRequestClose={() => props.setShowEditMovieSerie(false)}
+      isOpen={props.showEditarAvaliacao}
+      onRequestClose={() => props.setShowEditarAvaliacao(false)}
       contentLabel="Editar Filme/Série"
       appElement={document.getElementById("root")}
     >
       <header>
-        <h2>Editar Filme/Série</h2>
+        <h2>Editar avaliação</h2>
       </header>
       <form
         onSubmit={handleSubmit}
@@ -179,7 +168,7 @@ export const EditMovieSerie = (props) => {
           <button
             type="button"
             onClick={() => {
-              props.setShowEditMovieSerie(false);
+              props.setShowEditarAvaliacao(false);
             }}
             className="btn-cancel"
           >

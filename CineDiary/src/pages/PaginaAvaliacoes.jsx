@@ -1,20 +1,21 @@
 import { useState, useEffect } from "react";
-import { AddMovieSerie } from "../components/AddMovieSerie";
+import { Link } from "react-router-dom";
 import { AlertModal } from "../components/AlertModal";
 import Logo from "../components/Logo";
 import InfoCard from "../components/InfoCard";
 import FilterBar from "../components/FilterBar";
 import CardAvaliacao from "../components/CardAvaliacao";
 import "../styles/PaginaAvaliacoes.css";
-import { EditMovieSerie } from "../components/EditMovieSerie";
-import { DeleteMovieSerie } from "../components/DeleteMovieSerie";
+import { getAvaliacoes } from "../services/api";
+import { ModalEditAvaliacao } from "../components/ModalEditAvaliacao";
+import { ModalDelAvaliacao } from "../components/ModalDelAvaliacao";
+import { LoadingSpinner } from "../components/LoadingSpinner";
 
 function PaginaAvaliacoes() {
   const [filtro, setFiltro] = useState("Todos");
 
-  const [showAddMovieSerie, setShowAddMovieSerie] = useState(false);
-  const [showEditMovieSerie, setShowEditMovieSerie] = useState(false);
-  const [showDeleteMovieSerie, setShowDeleteMovieSerie] = useState(false);
+  const [showEditarAvaliacao, setShowEditarAvaliacao] = useState(false);
+  const [showDeletarAvaliacao, setShowDeletarAvaliacao] = useState(false);
   const [editData, setEditData] = useState({});
   const [deleteData, setDeleteData] = useState({});
   const [showAlert, setShowAlert] = useState(false);
@@ -44,10 +45,8 @@ function PaginaAvaliacoes() {
   const refresh = async () => {
     try {
       setIsRefreshing(true);
-      const response = await fetch("http://localhost:3000/api", {
-        method: "GET",
-      });
-      setCards(await response.json());
+      const data = await getAvaliacoes();
+      setCards(data);
       setIsRefreshing(false);
     } catch (err) {
       console.error(err);
@@ -93,14 +92,9 @@ function PaginaAvaliacoes() {
         <section className="header-middle" aria-label="Controles de avaliação">
           <header className="title-section">
             <h1>Avaliações</h1>
-            <button
-              className="btn-adicionar"
-              onClick={() => {
-                setShowAddMovieSerie(true);
-              }}
-            >
-              + Adicionar
-            </button>
+            <Link to="/adicionar">
+              <button className="btn-adicionar">+ Adicionar</button>
+            </Link>
           </header>
           <div className="filter-section">
             <FilterBar filtro={filtro} setFiltro={setFiltro} />
@@ -120,7 +114,7 @@ function PaginaAvaliacoes() {
                     const index = cardsArray.indexOf(cardEl);
                     if (index !== -1) {
                       setDeleteData(avaliacoesFiltradas[index]);
-                      setShowDeleteMovieSerie(true);
+                      setShowDeletarAvaliacao(true);
                     }
                   }
                 }
@@ -137,7 +131,7 @@ function PaginaAvaliacoes() {
                   end_date={avaliacao.end_date}
                   comment={avaliacao.comment}
                   setEditData={setEditData}
-                  setShowEditMovieSerie={setShowEditMovieSerie}
+                  setShowEditarAvaliacao={setShowEditarAvaliacao}
                 />
               ))}
             </section>
@@ -145,57 +139,21 @@ function PaginaAvaliacoes() {
             <p>Nenhum filme ou série foi avaliado</p>
           )
         ) : (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: "2rem",
-              color: "white",
-              minHeight: "200px",
-            }}
-          >
-            <div
-              style={{
-                border: "4px solid rgba(255, 255, 255, 0.1)",
-                width: "36px",
-                height: "36px",
-                borderRadius: "50%",
-                borderLeftColor: "#ff0000",
-                animation: "spin 1s linear infinite",
-                marginBottom: "1rem",
-              }}
-            />
-            <span>Carregando cards...</span>
-            <style>{`
-            @keyframes spin {
-              0% { transform: rotate(0deg); }
-              100% { transform: rotate(360deg); }
-            }
-          `}</style>
-          </div>
+          <LoadingSpinner text="Carregando cards..." />
         )}
       </div>
-      <EditMovieSerie
+      <ModalEditAvaliacao
         refresh={refresh}
         setIsRefreshing={setIsRefreshing}
-        showEditMovieSerie={showEditMovieSerie}
-        setShowEditMovieSerie={setShowEditMovieSerie}
+        showEditarAvaliacao={showEditarAvaliacao}
+        setShowEditarAvaliacao={setShowEditarAvaliacao}
         setMessageAlert={setMessageAlert}
         movieSerie={editData}
       />
-      <AddMovieSerie
+      <ModalDelAvaliacao
         refresh={refresh}
-        setIsRefreshing={setIsRefreshing}
-        showAddMovieSerie={showAddMovieSerie}
-        setShowAddMovieSerie={setShowAddMovieSerie}
-        setMessageAlert={setMessageAlert}
-      />
-      <DeleteMovieSerie
-        refresh={refresh}
-        showDeleteMovieSerie={showDeleteMovieSerie}
-        setShowDeleteMovieSerie={setShowDeleteMovieSerie}
+        showDeletarAvaliacao={showDeletarAvaliacao}
+        setShowDeletarAvaliacao={setShowDeletarAvaliacao}
         setAlertTitle={setAlertTitle}
         setMessageAlert={setMessageAlert}
         movieSerie={deleteData}
