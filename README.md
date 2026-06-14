@@ -103,6 +103,10 @@ Inicie a aplicação:
 npm run dev
 ```
 
+## Como acessar
+
+Após iniciar a aplicação CineDiary e CineDiary-API conforme os passos a cima, abra um navegador e insira na url ```http://localhost:5173/``` para acessar a página inicial.
+
 ## Colaboradores
 
 - Carlos Eduardo (https://github.com/carlosrosen)
