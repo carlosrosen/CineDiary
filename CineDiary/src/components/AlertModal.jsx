@@ -6,7 +6,7 @@ export const AlertModal = (props) => {
       className="error-modal"
       isOpen={props.showAlert}
       onRequestClose={() => {
-        props.setMessageAlert("");
+        props.setAlertMessage("");
         props.setShowAlert(false);
       }}
       contentLabel="Erro"
@@ -34,10 +34,10 @@ export const AlertModal = (props) => {
       }}
     >
       <h2>{props.title}</h2>
-      <p>{props.messageAlert}</p>
+      <p>{props.alertMessage}</p>
       <button
         onClick={() => {
-          props.setMessageAlert("");
+          props.setAlertMessage("");
           props.setShowAlert(false);
         }}
         style={{

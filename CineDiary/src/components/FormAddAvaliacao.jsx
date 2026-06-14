@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { createAvaliacao } from "../services/api";
+import { AvaliacoesContext } from "../context/AvaliacoesContext";
 import "../styles/globalStyle.css";
 import "../styles/FormAddAvaliacao.css";
 
 const RATING_DEFAULT = 5.0;
 
-export const FormAddAvaliacao = (props) => {
+export const FormAddAvaliacao = () => {
   const [title, setTitle] = useState("");
   const [type, setType] = useState("");
   const [start_date, setStartDate] = useState("");
@@ -15,6 +16,7 @@ export const FormAddAvaliacao = (props) => {
   const [comment, setComment] = useState("");
   const [isAdding, setIsAdding] = useState(false);
   
+  const { fetchAvaliacoes, setAlertMessage, setAlertTitle } = useContext(AvaliacoesContext);
   const navigate = useNavigate();
 
   const resetForm = () => {
@@ -33,24 +35,24 @@ export const FormAddAvaliacao = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title) {
-      props.setMessageAlert("O título é obrigatório.");
+      setAlertMessage("O título é obrigatório.");
       return;
     }
     if (!type) {
-      props.setMessageAlert("O tipo é obrigatório.");
+      setAlertMessage("O tipo é obrigatório.");
       return;
     }
     if (!rating) {
-      props.setMessageAlert("A avaliação é obrigatória.");
+      setAlertMessage("A avaliação é obrigatória.");
       return;
     }
     const numericRating = parseFloat(rating);
     if (numericRating < 0 || numericRating > 10) {
-      props.setMessageAlert("A avaliação deve estar entre 0 e 10.");
+      setAlertMessage("A avaliação deve estar entre 0 e 10.");
       return;
     }
     if (start_date && end_date && new Date(start_date) > new Date(end_date)) {
-      props.setMessageAlert("A data de início não pode ser posterior à data de término.");
+      setAlertMessage("A data de início não pode ser posterior à data de término.");
       return;
     }
     
@@ -65,14 +67,17 @@ export const FormAddAvaliacao = (props) => {
 
     try {
       setIsAdding(true);
-      const response = await createAvaliacao(newFilm);
+      await createAvaliacao(newFilm);
       resetForm();
+      await fetchAvaliacoes();
       setIsAdding(false);
-      if(props.refresh) props.refresh();
+      setAlertTitle("Operação concluida");
+      setAlertMessage("Sua avaliação foi registrada com sucesso!");
       navigate('/avaliacoes');
     } catch (error) {
       console.error("Error adding movie or serie:", error);
-      props.setMessageAlert(error.message);
+      setAlertTitle('Ocorreu um erro')
+      setAlertMessage('Não foi possivel se conectar com o servidor, volte mais tarde.');
       setIsAdding(false);
     }
   };

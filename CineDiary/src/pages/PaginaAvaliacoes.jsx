@@ -1,12 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import { AlertModal } from "../components/AlertModal";
 import Logo from "../components/Logo";
 import InfoCard from "../components/InfoCard";
 import FilterBar from "../components/FilterBar";
 import CardAvaliacao from "../components/CardAvaliacao";
 import "../styles/PaginaAvaliacoes.css";
-import { getAvaliacoes } from "../services/api";
+import { AvaliacoesContext } from "../context/AvaliacoesContext";
 import { ModalEditAvaliacao } from "../components/ModalEditAvaliacao";
 import { ModalDelAvaliacao } from "../components/ModalDelAvaliacao";
 import { LoadingSpinner } from "../components/LoadingSpinner";
@@ -18,48 +17,8 @@ function PaginaAvaliacoes() {
   const [showDeletarAvaliacao, setShowDeletarAvaliacao] = useState(false);
   const [editData, setEditData] = useState({});
   const [deleteData, setDeleteData] = useState({});
-  const [showAlert, setShowAlert] = useState(false);
-  const [messageAlert, setMessageAlert] = useState("");
-  const [alertTitle, setAlertTitle] = useState("Ocorreu um erro");
 
-  const [isRefreshing, setIsRefreshing] = useState(false);
-
-  const [cards, setCards] = useState([]);
-
-  // cria um timer para o modal de alerta
-  useEffect(() => {
-    if (messageAlert === "") {
-      setAlertTitle("Ocorreu um erro");
-      return;
-    }
-    const alertTimeout = () => {
-      setShowAlert(true);
-      setTimeout(() => {
-        setMessageAlert("");
-        setShowAlert(false);
-      }, 8000);
-    };
-    alertTimeout();
-  }, [messageAlert]);
-
-  const refresh = async () => {
-    try {
-      setIsRefreshing(true);
-      const data = await getAvaliacoes();
-      setCards(data);
-      setIsRefreshing(false);
-    } catch (err) {
-      console.error(err);
-      setMessageAlert("Não foi possivel conectar com o servidor");
-      setIsRefreshing(false);
-    }
-  };
-
-  useEffect(() => {
-    (async () => {
-      await refresh();
-    })();
-  }, []);
+  const { cards, isRefreshing, setAlertTitle, setMessageAlert } = useContext(AvaliacoesContext);
 
   const avaliacoesFiltradas = cards.filter((avaliacao) => {
     if (filtro === "Todos") return true;
@@ -143,27 +102,18 @@ function PaginaAvaliacoes() {
         )}
       </div>
       <ModalEditAvaliacao
-        refresh={refresh}
-        setIsRefreshing={setIsRefreshing}
         showEditarAvaliacao={showEditarAvaliacao}
         setShowEditarAvaliacao={setShowEditarAvaliacao}
         setMessageAlert={setMessageAlert}
+        setAlertTitle={setAlertTitle}
         movieSerie={editData}
       />
       <ModalDelAvaliacao
-        refresh={refresh}
         showDeletarAvaliacao={showDeletarAvaliacao}
         setShowDeletarAvaliacao={setShowDeletarAvaliacao}
         setAlertTitle={setAlertTitle}
         setMessageAlert={setMessageAlert}
         movieSerie={deleteData}
-      />
-      <AlertModal
-        title={alertTitle}
-        messageAlert={messageAlert}
-        setMessageAlert={setMessageAlert}
-        showAlert={showAlert}
-        setShowAlert={setShowAlert}
       />
     </main>
   );

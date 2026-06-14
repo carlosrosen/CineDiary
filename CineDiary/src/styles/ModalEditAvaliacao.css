@@ -94,16 +94,19 @@
     flex: 1;
     color: var(--white);
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
     cursor: pointer;
     margin-right: auto;
     margin-left: auto;
     border-radius: 4px;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .btn-cancel:hover {
     background-color: #333333;
+    transform: translateY(-2px);
 }
 
 .btn-save {
@@ -111,16 +114,19 @@
     color: var(--white);
     flex: 1;
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
     cursor: pointer;
     margin-right: auto;
     margin-left: auto;
     border-radius: 4px;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .btn-save:hover {
     background-color: #FF1A1A;
+    transform: translateY(-2px);
 }
 
 .loading-container {
