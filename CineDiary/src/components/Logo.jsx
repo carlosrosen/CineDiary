@@ -5,13 +5,21 @@ import '../styles/globalStyle.css'
 
 function Logo() {
   return (
-    <Link to="/" className="logo-container">
-      <p className="logo-icon">🎞️</p>
-      <h1 className="logo-text">
-        <span className="text-white">Cine</span>
-        <span className="text-red">Diary</span>
-      </h1>
-    </Link>
+    <nav className="logo-nav-container">
+      <Link to="/" className="logo-brand">
+        <p className="logo-icon">🎞️</p>
+        <h1 className="logo-text">
+          <span className="text-white">Cine</span>
+          <span className="text-red">Diary</span>
+        </h1>
+      </Link>
+      
+      <ul className="logo-nav-links">
+        <li><Link to="/">Início</Link></li>
+        <li><Link to="/avaliacoes">Avaliações</Link></li>
+        <li><Link to="/adicionar">Adicionar</Link></li>
+      </ul>
+    </nav>
   );
 }
 

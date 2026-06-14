@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { createAvaliacao } from "../services/api";
+import { AvaliacoesContext } from "../context/AvaliacoesContext";
 import "../styles/globalStyle.css";
 import "../styles/FormAddAvaliacao.css";
 
@@ -15,6 +16,7 @@ export const FormAddAvaliacao = (props) => {
   const [comment, setComment] = useState("");
   const [isAdding, setIsAdding] = useState(false);
   
+  const { fetchAvaliacoes } = useContext(AvaliacoesContext);
   const navigate = useNavigate();
 
   const resetForm = () => {
@@ -65,10 +67,10 @@ export const FormAddAvaliacao = (props) => {
 
     try {
       setIsAdding(true);
-      const response = await createAvaliacao(newFilm);
+      await createAvaliacao(newFilm);
       resetForm();
+      await fetchAvaliacoes();
       setIsAdding(false);
-      if(props.refresh) props.refresh();
       navigate('/avaliacoes');
     } catch (error) {
       console.error("Error adding movie or serie:", error);

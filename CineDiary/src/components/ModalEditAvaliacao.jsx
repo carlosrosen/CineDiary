@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Modal from "react-modal";
 import { updateAvaliacao } from "../services/api";
+import { AvaliacoesContext } from "../context/AvaliacoesContext";
 import "../styles/globalStyle.css";
 import "../styles/ModalEditAvaliacao.css";
 
@@ -14,6 +15,7 @@ export const ModalEditAvaliacao = (props) => {
   const [rating, setRating] = useState(RATING_DEFAULT);
   const [comment, setComment] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
+  const { fetchAvaliacoes } = useContext(AvaliacoesContext);
 
   useEffect(() => {
     (() => {
@@ -70,12 +72,13 @@ export const ModalEditAvaliacao = (props) => {
     try {
       setIsUpdating(true);
       await updateAvaliacao(props.movieSerie.id, updatedFilm);
+      await fetchAvaliacoes();
       setIsUpdating(false);
-      props.refresh();
       props.setShowEditarAvaliacao(false);
     } catch {
       console.error('Erro ao editar avaliação')
       props.setMessageAlert('Erro ao editar avaliação');
+      setIsUpdating(false);
     }
   };
 

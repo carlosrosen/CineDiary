@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Modal from "react-modal";
 import { deleteAvaliacao } from "../services/api";
+import { AvaliacoesContext } from "../context/AvaliacoesContext";
 import "../styles/globalStyle.css";
 import "../styles/ModalDelAvaliacao.css";
 
 export const ModalDelAvaliacao = (props) => {
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const { fetchAvaliacoes } = useContext(AvaliacoesContext);
 
   const handleDelete = async () => {
     if (!props.movieSerie || !props.movieSerie.id) {
@@ -16,8 +19,8 @@ export const ModalDelAvaliacao = (props) => {
     try {
       setIsDeleting(true);
       await deleteAvaliacao(props.movieSerie.id);
+      await fetchAvaliacoes();
       setIsDeleting(false);
-      props.refresh();
       props.setShowDeletarAvaliacao(false);
       if (props.setAlertTitle) {
         props.setAlertTitle("Sucesso");
