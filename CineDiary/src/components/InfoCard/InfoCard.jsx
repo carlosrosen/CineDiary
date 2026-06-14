@@ -1,4 +1,4 @@
-import '../styles/InfoCard.css';
+import './InfoCard.css';
 
 function InfoCard({title, value}) {
     return(

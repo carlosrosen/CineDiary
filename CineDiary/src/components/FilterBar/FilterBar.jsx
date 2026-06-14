@@ -1,4 +1,4 @@
-import '../styles/FilterBar.css';
+import './FilterBar.css';
 
 function FilterBar({ filtro, setFiltro }){
     return (

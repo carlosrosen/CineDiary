@@ -1,6 +1,6 @@
-import '../styles/TextoInicial.css';
-import '../styles/globalStyle.css'
-import imagemCinema from '../assets/Cinema.png';
+import './TextoInicial.css';
+import '../../styles/global.css';
+import imagemCinema from '../../assets/Cinema.png';
 import { Link } from 'react-router-dom';
 
 function TextoInicial() {

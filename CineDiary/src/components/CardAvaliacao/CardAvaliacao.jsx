@@ -1,5 +1,5 @@
-import { formatarData } from "../utils/formatarData";
-import "../styles/CardAvaliacao.css";
+import { formatarData } from '../../utils/formatarData';
+import './CardAvaliacao.css';
 
 function CardAvaliacao({
   id,

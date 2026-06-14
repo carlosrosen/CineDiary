@@ -1,5 +1,5 @@
-import Logo from "../components/Logo"
-import TextoInicial from "../components/TextoInicial"
+import Logo from '../components/Logo/Logo';
+import TextoInicial from '../components/TextoInicial/TextoInicial';
 
 function PaginaInicial() {
   return (

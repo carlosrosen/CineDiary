@@ -1,9 +1,9 @@
 import { useState, useEffect, useContext } from "react";
 import Modal from "react-modal";
-import { updateAvaliacao } from "../services/api";
-import { AvaliacoesContext } from "../context/AvaliacoesContext";
-import "../styles/globalStyle.css";
-import "../styles/ModalEditAvaliacao.css";
+import { updateAvaliacao } from '../../services/api';
+import { AvaliacoesContext } from '../../context/AvaliacoesContext';
+import '../../styles/global.css';
+import './ModalEditAvaliacao.css';
 
 const RATING_DEFAULT = 5.0;
 

@@ -1,0 +1,45 @@
+.alert-modal-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+}
+
+.error-modal {
+  position: relative;
+  color: #fff;
+  background-color: #161616;
+  margin: auto;
+  padding: 2rem;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  outline: none;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.alert-modal-btn {
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  margin: 0 auto;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.alert-modal-btn:hover {
+  background-color: #cc0000;
+}

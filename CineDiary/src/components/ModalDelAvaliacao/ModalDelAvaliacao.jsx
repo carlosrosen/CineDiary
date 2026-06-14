@@ -1,9 +1,9 @@
 import { useState, useContext } from "react";
 import Modal from "react-modal";
-import { deleteAvaliacao } from "../services/api";
-import { AvaliacoesContext } from "../context/AvaliacoesContext";
-import "../styles/globalStyle.css";
-import "../styles/ModalDelAvaliacao.css";
+import { deleteAvaliacao } from '../../services/api';
+import { AvaliacoesContext } from '../../context/AvaliacoesContext';
+import '../../styles/global.css';
+import './ModalDelAvaliacao.css';
 
 export const ModalDelAvaliacao = (props) => {
   const [isDeleting, setIsDeleting] = useState(false);
