@@ -10,7 +10,7 @@ function CardAvaliacao({
   rating,
   comment,
   setEditData,
-  setShowEditMovieSerie,
+  setShowEditarAvaliacao,
 }) {
   return (
     <article className="review-card">
@@ -43,7 +43,7 @@ function CardAvaliacao({
               rating,
               comment,
             });
-            setShowEditMovieSerie(true);
+            setShowEditarAvaliacao(true);
           }}
         >
           Editar

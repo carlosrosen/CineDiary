@@ -1,9 +1,10 @@
 import { useState } from "react";
 import Modal from "react-modal";
+import { deleteAvaliacao } from "../services/api";
 import "../styles/globalStyle.css";
-import "../styles/DeleteMovieSerie.css";
+import "../styles/ModalDelAvaliacao.css";
 
-export const DeleteMovieSerie = (props) => {
+export const ModalDelAvaliacao = (props) => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
@@ -14,22 +15,10 @@ export const DeleteMovieSerie = (props) => {
 
     try {
       setIsDeleting(true);
-      const response = await fetch(
-        `http://localhost:3000/api/${props.movieSerie.id}`,
-        {
-          method: "DELETE",
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Erro ao excluir o filme/série");
-      }
-
+      await deleteAvaliacao(props.movieSerie.id);
       setIsDeleting(false);
       props.refresh();
-      props.setShowDeleteMovieSerie(false);
-      
-      // Emit success alert
+      props.setShowDeletarAvaliacao(false);
       if (props.setAlertTitle) {
         props.setAlertTitle("Sucesso");
       }
@@ -47,8 +36,8 @@ export const DeleteMovieSerie = (props) => {
   return (
     <Modal
       id="delete-confirm"
-      isOpen={props.showDeleteMovieSerie}
-      onRequestClose={() => props.setShowDeleteMovieSerie(false)}
+      isOpen={props.showDeletarAvaliacao}
+      onRequestClose={() => props.setShowDeletarAvaliacao(false)}
       contentLabel="Excluir Avaliação"
       appElement={document.getElementById("root")}
       className="delete-movie-modal"
@@ -69,7 +58,7 @@ export const DeleteMovieSerie = (props) => {
           <footer className="delete-buttons-wrapper">
             <button
               type="button"
-              onClick={() => props.setShowDeleteMovieSerie(false)}
+              onClick={() => props.setShowDeletarAvaliacao(false)}
               className="btn-delete-cancel"
             >
               Cancelar

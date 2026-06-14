@@ -1,0 +1,51 @@
+.pagina-criar-avaliacao {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 1rem; 
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+@media (max-height: 850px), (max-width: 768px) {
+    .pagina-criar-avaliacao {
+        align-items: flex-start;
+        padding-top: 8rem; 
+    }
+}
+
+.cadastro-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+.cadastro-title {
+    display: block;
+    color: var(--gray-3);
+    font-size: 0.8rem;
+    margin-bottom: 0.2rem;
+}
+
+.red-triangle-bg {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 0 500px 300px; 
+    border-color: transparent transparent var(--red) transparent;
+    z-index: -1;
+}
+
+@media (max-width: 600px) {
+    .red-triangle-bg {
+        border-width: 0 0 300px 200px;
+    }
+}
