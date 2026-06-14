@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { getAvaliacoes } from "../services/api";
 import { AvaliacoesContext } from "./AvaliacoesContext";
-import { AlertModal } from "../components/AlertModal";
+import { AlertModal } from '../components/AlertModal/AlertModal';
 
 export const AvaliacoesProvider = ({ children }) => {
   const [cards, setCards] = useState([]);

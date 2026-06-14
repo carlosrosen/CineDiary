@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import Logo from '../components/Logo';
-import { FormAddAvaliacao } from '../components/FormAddAvaliacao';
+import Logo from '../components/Logo/Logo';
+import { FormAddAvaliacao } from '../components/FormAddAvaliacao/FormAddAvaliacao';
 import '../styles/PaginaCriarAvaliacao.css';
 import { AvaliacoesContext } from '../context/AvaliacoesContext';
 

@@ -1,9 +1,9 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { createAvaliacao } from "../services/api";
-import { AvaliacoesContext } from "../context/AvaliacoesContext";
-import "../styles/globalStyle.css";
-import "../styles/FormAddAvaliacao.css";
+import { createAvaliacao } from '../../services/api';
+import { AvaliacoesContext } from '../../context/AvaliacoesContext';
+import '../../styles/global.css';
+import './FormAddAvaliacao.css';
 
 const RATING_DEFAULT = 5.0;
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/Logo.css';
-import '../styles/globalStyle.css'
+import './Logo.css';
+import '../../styles/global.css';
 
 function Logo() {
   return (

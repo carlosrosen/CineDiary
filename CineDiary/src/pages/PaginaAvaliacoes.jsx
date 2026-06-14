@@ -1,14 +1,14 @@
 import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import Logo from "../components/Logo";
-import InfoCard from "../components/InfoCard";
-import FilterBar from "../components/FilterBar";
-import CardAvaliacao from "../components/CardAvaliacao";
+import Logo from '../components/Logo/Logo';
+import InfoCard from '../components/InfoCard/InfoCard';
+import FilterBar from '../components/FilterBar/FilterBar';
+import CardAvaliacao from '../components/CardAvaliacao/CardAvaliacao';
 import "../styles/PaginaAvaliacoes.css";
 import { AvaliacoesContext } from "../context/AvaliacoesContext";
-import { ModalEditAvaliacao } from "../components/ModalEditAvaliacao";
-import { ModalDelAvaliacao } from "../components/ModalDelAvaliacao";
-import { LoadingSpinner } from "../components/LoadingSpinner";
+import { ModalEditAvaliacao } from '../components/ModalEditAvaliacao/ModalEditAvaliacao';
+import { ModalDelAvaliacao } from '../components/ModalDelAvaliacao/ModalDelAvaliacao';
+import { LoadingSpinner } from '../components/LoadingSpinner/LoadingSpinner';
 
 function PaginaAvaliacoes() {
   const [filtro, setFiltro] = useState("Todos");
