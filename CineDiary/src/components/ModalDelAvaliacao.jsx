@@ -8,11 +8,11 @@ import "../styles/ModalDelAvaliacao.css";
 export const ModalDelAvaliacao = (props) => {
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const { fetchAvaliacoes } = useContext(AvaliacoesContext);
+  const { fetchAvaliacoes, setAlertTitle, setAlertMessage } = useContext(AvaliacoesContext);
 
   const handleDelete = async () => {
     if (!props.movieSerie || !props.movieSerie.id) {
-      props.setMessageAlert("ID da avaliação inválido.");
+      setAlertMessage("ID da avaliação inválido.");
       return;
     }
 
@@ -22,16 +22,12 @@ export const ModalDelAvaliacao = (props) => {
       await fetchAvaliacoes();
       setIsDeleting(false);
       props.setShowDeletarAvaliacao(false);
-      if (props.setAlertTitle) {
-        props.setAlertTitle("Sucesso");
-      }
-      props.setMessageAlert(`"${props.movieSerie.title}" deletado com sucesso.`);
+      setAlertTitle("Operação concluida");
+      setAlertMessage(`"${props.movieSerie.title}" deletado com sucesso.`);
     } catch (error) {
       console.error("Error deleting movie or serie:", error);
-      if (props.setAlertTitle) {
-        props.setAlertTitle("Ocorreu um erro");
-      }
-      props.setMessageAlert(error.message || "Erro ao excluir o filme/série");
+      setAlertTitle("Ocorreu um erro");
+      setAlertMessage("Não foi possivel se conectar com o servidor, volte mais tarde.");
       setIsDeleting(false);
     }
   };

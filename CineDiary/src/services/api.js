@@ -7,15 +7,20 @@ export const getAvaliacoes = async () => {
 };
 
 export const createAvaliacao = async (avaliacao) => {
-  const response = await fetch(API_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(avaliacao),
-  });
-  if (!response.ok) throw new Error("Erro ao adicionar o filme/série");
-  return response;
+  try{
+
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(avaliacao),
+    });
+    if (!response.ok) throw new Error("Erro ao adicionar o filme/série");
+    return response;
+  }catch{
+    throw new Error('falha ao criar avaliação')
+  }
 };
 
 export const updateAvaliacao = async (id, avaliacao) => {

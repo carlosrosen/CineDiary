@@ -1,6 +1,5 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import { AlertModal } from "../components/AlertModal";
 import Logo from "../components/Logo";
 import InfoCard from "../components/InfoCard";
 import FilterBar from "../components/FilterBar";
@@ -18,27 +17,8 @@ function PaginaAvaliacoes() {
   const [showDeletarAvaliacao, setShowDeletarAvaliacao] = useState(false);
   const [editData, setEditData] = useState({});
   const [deleteData, setDeleteData] = useState({});
-  const [showAlert, setShowAlert] = useState(false);
-  const [messageAlert, setMessageAlert] = useState("");
-  const [alertTitle, setAlertTitle] = useState("Ocorreu um erro");
 
-  const { cards, isRefreshing } = useContext(AvaliacoesContext);
-
-  // cria um timer para o modal de alerta
-  useEffect(() => {
-    if (messageAlert === "") {
-      setAlertTitle("Ocorreu um erro");
-      return;
-    }
-    const alertTimeout = () => {
-      setShowAlert(true);
-      setTimeout(() => {
-        setMessageAlert("");
-        setShowAlert(false);
-      }, 8000);
-    };
-    alertTimeout();
-  }, [messageAlert]);
+  const { cards, isRefreshing, setAlertTitle, setMessageAlert } = useContext(AvaliacoesContext);
 
   const avaliacoesFiltradas = cards.filter((avaliacao) => {
     if (filtro === "Todos") return true;
@@ -125,6 +105,7 @@ function PaginaAvaliacoes() {
         showEditarAvaliacao={showEditarAvaliacao}
         setShowEditarAvaliacao={setShowEditarAvaliacao}
         setMessageAlert={setMessageAlert}
+        setAlertTitle={setAlertTitle}
         movieSerie={editData}
       />
       <ModalDelAvaliacao
@@ -133,13 +114,6 @@ function PaginaAvaliacoes() {
         setAlertTitle={setAlertTitle}
         setMessageAlert={setMessageAlert}
         movieSerie={deleteData}
-      />
-      <AlertModal
-        title={alertTitle}
-        messageAlert={messageAlert}
-        setMessageAlert={setMessageAlert}
-        showAlert={showAlert}
-        setShowAlert={setShowAlert}
       />
     </main>
   );

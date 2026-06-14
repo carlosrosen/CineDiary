@@ -15,7 +15,7 @@ export const ModalEditAvaliacao = (props) => {
   const [rating, setRating] = useState(RATING_DEFAULT);
   const [comment, setComment] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
-  const { fetchAvaliacoes } = useContext(AvaliacoesContext);
+  const { fetchAvaliacoes, setAlertMessage, setAlertTitle } = useContext(AvaliacoesContext);
 
   useEffect(() => {
     (() => {
@@ -33,28 +33,34 @@ export const ModalEditAvaliacao = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!props.movieSerie || !props.movieSerie.id) {
-      props.setMessageAlert("ID do filme/série inválido.");
+      setAlertTitle('Falha ao encontrar avaliação')
+      setAlertMessage("ID do filme/série inválido.");
       return;
     }
     if (!title) {
-      props.setMessageAlert("O título é obrigatório.");
+      setAlertTitle('Formulário invalido')
+      setAlertMessage("O título é obrigatório.");
       return;
     }
     if (!type) {
-      props.setMessageAlert("O tipo é obrigatório.");
+      setAlertTitle('Formulário invalido')
+      setAlertMessage("O tipo é obrigatório.");
       return;
     }
     if (!rating) {
-      props.setMessageAlert("A avaliação é obrigatória.");
+      setAlertTitle('Formulário invalido')
+      setAlertMessage("A avaliação é obrigatória.");
       return;
     }
     const numericRating = parseFloat(rating);
     if (numericRating < 0 || numericRating > 10) {
-      props.setMessageAlert("A avaliação deve estar entre 0 e 10.");
+      setAlertTitle('Formulário invalido')
+      setAlertMessage("A avaliação deve estar entre 0 e 10.");
       return;
     }
     if (start_date && end_date && new Date(start_date) > new Date(end_date)) {
-      props.setMessageAlert(
+      setAlertTitle('Formulário invalido')
+      setAlertMessage(
         "A data de início não pode ser posterior à data de término.",
       );
       return;
@@ -75,9 +81,12 @@ export const ModalEditAvaliacao = (props) => {
       await fetchAvaliacoes();
       setIsUpdating(false);
       props.setShowEditarAvaliacao(false);
+      props.setAlertTitle("Operação concluida");
+      setAlertMessage("Sua avaliação foi editada com sucesso.");
     } catch {
       console.error('Erro ao editar avaliação')
-      props.setMessageAlert('Erro ao editar avaliação');
+      setAlertTitle('Ocorreu um erro')
+      setAlertMessage('Não foi possivel se conectar com o servidor, volte mais tarde.');
       setIsUpdating(false);
     }
   };
