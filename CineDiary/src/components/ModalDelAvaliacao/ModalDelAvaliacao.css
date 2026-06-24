@@ -1,0 +1,124 @@
+.delete-movie-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.delete-movie-modal {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2.5rem 2rem;
+    border-radius: 4px;
+    background-color: var(--gray-1);
+    border: none;
+    width: 90%;
+    max-width: 480px;
+    height: auto;
+    inset: auto;
+    gap: 1.5rem;
+    margin: auto;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.delete-loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    color: var(--white);
+    min-height: 100px;
+}
+
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border-left-color: var(--red);
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+.delete-loading-text {
+    font-size: 1rem;
+    color: var(--white);
+}
+
+.delete-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 1.5rem;
+}
+
+.delete-title {
+    font-size: 1.5rem;
+    font-weight: normal;
+    color: var(--white);
+    text-align: center;
+    margin: 0;
+}
+
+.delete-buttons-wrapper {
+    display: flex;
+    gap: 1.5rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.btn-delete-cancel {
+    background-color: #222222;
+    color: var(--white);
+    border: none;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 4px;
+    flex: 1;
+    max-width: 150px;
+    text-align: center;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-delete-cancel:hover {
+    background-color: #333333;
+    transform: translateY(-2px);
+}
+
+.btn-delete-confirm {
+    background-color: var(--red);
+    color: var(--white);
+    border: none;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 4px;
+    flex: 1;
+    max-width: 150px;
+    text-align: center;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-delete-confirm:hover {
+    background-color: #FF1A1A;
+    transform: translateY(-2px);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
